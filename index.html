@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
 </head>
 <style>
     .container {
@@ -36,16 +35,19 @@
         display: flex; 
         justify-content: center;
     }
-
-</style>
+    .slider {
+        width: 100%;
+    }
+    </style>
 <body>
     <div class ="container">
         <div class="card">
             <div class="card-header">Панель управления</div>
             <div>
                 <label>Частота сигнала:</label>
-                <input type="range" name="rgFreq" id="rgFreq" class="slider" value = "1"  min="1" max="20000">
-                <input type="number" name="tbFreq" id="tbFreq" class="cFormElem" value = 100>
+                <input type="number" name="tbFreq" id="tbFreq" class="cFormElem" value = 50>
+                <input type="range" name="rgFreq" id="rgFreq" class="slider" length="400px" value = "50"  min="1" max="20000">
+                
             </div>
             <div>
                 <label>Количество точек на период:</label>
@@ -54,11 +56,11 @@
 
         </div>
         <div class="card" style="width: 600px;" >
-            <div class="card-header">Период оцифрованного сигнала</div>
+            <div class="card-header">Оцифрованный сигнал</div>
             <canvas id="myChart"></canvas>
         </div>
         <div class="card" style="width: 600px;" >
-            <div class="card-header">Сигнал</div>
+            <div class="card-header">FFT</div>
             <canvas id="myChart"></canvas>
         </div>
 

@@ -1,19 +1,25 @@
-
 const ctx = document.getElementById('myChart');
-const period = 0.02;
-let freq = 50
-const samplesNumber = 100;
-const sinTime = new Array(samplesNumber).fill("").map((_, i) => i/samplesNumber*period)
-let sinAmp = sinTime.map((x) => Math.sin(2*Math.PI*freq*x))
-
 const sliderFreq = document.getElementById("rgFreq");
-const textFreq = document.getElementById("tbFreq");
+const textBoxFreq = document.getElementById("tbFreq");
+const textBoxSampRate = document.getElementById('tbSampleFreq');
+
+let sampleRate = textBoxSampRate.value*50;
+let freq = textBoxFreq.value;
+let sampleNumber = 50;
+let sinTime = new Array(sampleNumber).fill("").map((_, i) => i/sampleNumber*(1/freq));
+let sinAmp = sinTime.map((x) => Math.sin(2*Math.PI*freq*x));
+console.log(sampleRate);
+
 
 function sliderRefresh()
 {
     freq = sliderFreq.value;
+    textBoxFreq.value = freq
+    T = Math.max(1/freq, 1/sampleRate*sampleNumber);
+    sinTime = new Array(sampleNumber).fill("").map((_, i) => i/sampleNumber*T);
     sinAmp = sinTime.map((x) => Math.sin(2*Math.PI*freq*x))
     dataChart.data.datasets[0].data = sinAmp;
+    dataChart.data.labels = sinTime.map((x) => (x*1000).toFixed(3))
     dataChart.update();
 }
 
@@ -64,4 +70,4 @@ options: {
 
 
 sliderFreq.addEventListener("input", sliderRefresh);
-sliderFreq.addEventListener("input", (x) => textFreq.value = sliderFreq.value)
+textBoxFreq.addEventListener("change", (x) => {sliderFreq.value = textBoxFreq.value; sliderRefresh()});
