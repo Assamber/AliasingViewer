@@ -5,9 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation"></script>
     <script src="./lib/fft.js"></script>
 </head>
 <style>
+    body {
+        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        margin: 0;
+        padding: 20px;
+        min-height: 100vh;
+    }
+
     .container {
         display: flex;
         flex-wrap: wrap;
@@ -17,20 +26,30 @@
     }
     .card {
         flex: 0 1 600px;
-        background: #fff;
+        background: rgba(255, 255, 255, 0.95);
         border-radius: 10px;
         box-shadow: 5px 5px 5px rgba(0,0,0,0.1);
         padding: 20px;
         display: flex;
         flex-direction: column;
+        backdrop-filter: blur(10px);
+        min-width: 200px;
     }
+
     .cFormElem {
         margin: 5px;
     }
+
+    input.cFormElem {
+        width: 100px;
+        text-align: center;
+    }
+
     .card-header {
-        margin-bottom: 5px;
+        margin-bottom: 10px;
         padding-bottom: 2px;
         border-bottom: 2px solid #f0f0f0;
+        color: #4a6cf7;
         font-size: 1.6rem;
         font-weight: 600;
         display: flex; 
@@ -39,32 +58,71 @@
     .slider {
         width: 100%;
     }
+
+    label {
+        display: inline-block;
+        margin-bottom: 8px;
+        padding: 5px;
+        font-weight: 600;
+        color: #2c3e50;
+        font-size: 1.1rem;
+    }
+
+    .folder
+    {
+        margin-left: auto;
+    }
+
+    input, select{
+        min-width: 150px;
+        font-size: 1.0rem;
+    }
+
+    .param{
+        display: block;
+        font-size: 1.1rem;
+        padding: 0px;
+        font-weight: 400;
+    }
     </style>
 <body>
     <div class ="container">
         <div class="card">
             <div class="card-header">Панель управления</div>
-            <div>
-                <label>Частота сигнала:</label>
+            <div class="folder">
+                <label>Частота сигнала, Гц:</label>
                 <input type="number" name="tbFreq" id="tbFreq" class="cFormElem" value = 50>
-                <input type="range" name="rgFreq" id="rgFreq" class="slider" length="400px" value = "50"  min="1" max="20000">
-                
+
             </div>
-            <div>
+            <input type="range" name="rgFreq" id="rgFreq" class="slider" length="400px" value = "50"  min="1" max="30000">
+            <div class="folder">
                 <label>Количество точек на период:</label>
                 <input type="number" name="tbSampleFreq" id="tbSampleFreq" class="cFormElem" value = 96>
             </div>
-
+            <div class="folder">
+                <label>Фильтр антиаллиасинговый:</label>
+                <select name="sbFilterType" id = "sbFilterType" class="cFormElem">
+                    <option value= "0">Нет фильтра</option>
+                    <option value= "1">ECIT</option>
+                </select>
+            </div>
         </div>
-        <div class="card" style="width: 600px;" >
+        <div class="card">
+            <div class="card-header">Расчетные характеристики</div>
+            <div id ="textOutput"></div>
+        </div>
+            <div class="card">
+            <div class="card-header">Фильтр</div>
+            <canvas id="filterChart"></canvas>
+        </div>
+        <div class="card">
             <div class="card-header">Оцифрованный сигнал</div>
             <canvas id="digitalChart"></canvas>
         </div>
-        <div class="card" style="width: 600px;" >
+        <div class="card">
             <div class="card-header">FFT</div>
             <canvas id="freqChart"></canvas>
         </div>
-
     </div>
 
     <script src="script.js"></script>
