@@ -260,10 +260,23 @@ function refreshData()
 sliderFreq.addEventListener("input", () => {
     refreshData();
 });
+
 textBoxFreq.addEventListener("change", () => {
     sliderFreq.value = textBoxFreq.value;
     refreshData();
 });
 
-textBoxSampRate.addEventListener("change", () => {sampleRate = textBoxSampRate.value*firstHarmonic; calcParameters();})
+textBoxSampRate.addEventListener("change", () => {
+    sampleRate = textBoxSampRate.value*firstHarmonic;
+    timeSec = new Array(sampleRate).fill().map((_, i) => i/sampleRate);
+    sinAmp = sinTime.map((x) => Math.sin(2*Math.PI*freq*x));
+    filterAmp = 1;
+
+    dataSet = timeSec.map((x) => Math.sin(2*Math.PI*freq*x));
+    data = new ComplexArray(dataSet)
+    fftData = data.FFT().magnitude().map((x) => x/dataSet.length);
+    freqs = new Array(fftData.length).fill().map((_, i) => i*sampleRate/fftData.length);
+    
+    refreshData();
+});
 selectFilter.addEventListener("change", refreshData);
